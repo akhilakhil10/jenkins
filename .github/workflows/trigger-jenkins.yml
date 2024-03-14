@@ -1,4 +1,4 @@
-name: Trigger Jenkins on push to master
+name: Trigger Jenkins Job
 
 on:
   push:
@@ -6,12 +6,15 @@ on:
       - master
 
 jobs:
-  trigger_jenkins:
+  trigger_jenkins_job:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Jenkins build
+      - name: Obtain Jenkins Crumb
         run: |
-          CRUMB=$(curl -s 'http://34.88.175.96:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)' | sed 's/[\r\n]//g')
-          curl -X POST -u "admin:admin" -H "$CRUMB" http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=jenkins_job
-
-
+          CRUMB=$(curl -s 'http://34.88.175.96:8080/crumbIssuer/api/xml' | xmllint --xpath "string(//crumb)" -)
+          echo "::set-env name=CRUMB::$CRUMB"
+      - name: Trigger Jenkins Job
+        env:
+          CRUMB: ${{ secrets.CRUMB }}
+        run: |
+          curl -X POST -u "admin:admin" -H "Jenkins-Crumb:$CRUMB" http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=jenkins_job
