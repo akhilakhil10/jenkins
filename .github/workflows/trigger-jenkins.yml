@@ -9,12 +9,11 @@ jobs:
   trigger_jenkins_job:
     runs-on: ubuntu-latest
     steps:
-      - name: Obtain Jenkins Crumb
+      - name: Get Jenkins Crumb
         run: |
-          CRUMB=$(curl -s 'http://34.88.175.96:8080/crumbIssuer/api/xml' | xmllint --xpath "string(//crumb)" -)
-          echo "::set-env name=CRUMB::$CRUMB"
+          CRUMB=$(curl -s 'http://34.88.175.96:8080/crumbIssuer/api/xml' | grep -oP '(?<=<crumb>)[^<]+' | sed 's/[\r\n]//g')
+          echo "Jenkins Crumb: $CRUMB"
+      
       - name: Trigger Jenkins Job
-        env:
-          CRUMB: ${{ secrets.CRUMB }}
         run: |
           curl -X POST -u "admin:admin" -H "Jenkins-Crumb:$CRUMB" http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=jenkins_job
