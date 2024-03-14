@@ -8,18 +8,17 @@ on:
 jobs:
   trigger_jenkins_job:
     runs-on: ubuntu-latest
-    env:
-      CRUMB: ""
     steps:
       - name: Get Jenkins Crumb
+        id: get_crumb
         run: |
-          export CRUMB=$(curl -u "admin:admin" -s 'http://34.88.175.96:8080/crumbIssuer/api/xml' | grep -oP '(?<=<crumb>)[^<]+' | sed 's/[\r\n]//g')
-          echo "Jenkins Crumb: $CRUMB"
+          CRUMB=$(curl -u "admin:admin" -s 'http://34.88.175.96:8080/crumbIssuer/api/xml' | grep -oP '(?<=<crumb>)[^<]+' | sed 's/[\r\n]//g')
+          echo "::set-output name=crumb::$CRUMB"
       
       - name: Debugging
         run: |
-          echo "CRUMB variable value: $CRUMB"
+          echo "CRUMB variable value: ${{ steps.get_crumb.outputs.crumb }}"
       
       - name: Trigger Jenkins Job
         run: |
-          curl -X POST -u "admin:admin" -H "X-Requested-By:Jenkins" -H "Jenkins-Crumb:$CRUMB" "http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=jenkins_job"
+          curl -X POST -u "admin:admin" -H "X-Requested-By:Jenkins" -H "Jenkins-Crumb:${{ steps.get_crumb.outputs.crumb }}" "http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=jenkins_job"
