@@ -23,4 +23,4 @@ jobs:
       
       - name: Trigger Jenkins Job
         run: |
-          curl -X POST -u "admin:admin" -H "X-Requested-By:Jenkins" -H "Jenkins-Crumb:${{ steps.get_crumb.outputs.crumb }}" "http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=new"
+          curl -X POST -u "admin:admin" -H "X-Requested-By:Jenkins" -H "Jenkins-Crumb:${{ steps.get_crumb.outputs.crumb }}" "34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=new"
