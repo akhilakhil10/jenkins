@@ -13,6 +13,7 @@ jobs:
         id: get_crumb
         run: |
           CRUMB=$(curl -u "admin:admin" -s 'http://34.88.175.96:8080/crumbIssuer/api/xml' | grep -oP '(?<=<crumb>)[^<]+' | sed 's/[\r\n]//g')
+          echo "Jenkins Crumb: $CRUMB"
           echo "::set-output name=crumb::$CRUMB"
       
       - name: Debugging
