@@ -19,7 +19,7 @@ jobs:
       - name: Debugging
         run: |
           echo "CRUMB variable value: ${{ steps.get_crumb.outputs.crumb }}"
-          
+        
       
       - name: Trigger Jenkins Job
         run: |
