@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Trigger Jenkins Job
         run: |
-          wget --auth-no-challenge --http-user=admin --http-password=admin --header="X-Requested-By:Jenkins" --post-data="" "http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=jenkins_job"
+          http -a admin:admin POST "http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=jenkins_job" X-Requested-By:Jenkins
