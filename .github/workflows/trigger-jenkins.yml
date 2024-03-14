@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Trigger Jenkins build
         run: |
-          curl -X POST -u username:jenkins_job http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build
+          curl -X POST -u http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=jenkins_job
