@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Trigger Jenkins build
         run: |
-          CRUMB=$(curl -s 'http://http://34.88.175.96:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+          CRUMB=$(curl -s 'http://34.88.175.96:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
           curl -X POST -u "admin:admin" -H "$CRUMB" http://34.88.175.96:8080/job/Trigger%20Airflow%20DAG/build?token=jenkins_job
 
